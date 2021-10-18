@@ -1,0 +1,30 @@
+version: "3.2"
+services:
+  php:
+    build: .
+    ports:
+      - 8080:80
+    depends_on:
+      - db
+    volumes:
+      # Mount source-code for development
+      - ./app:/var/www/html
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: db_password
+    volumes:
+      - ./mysqldb:/var/lib/mysql
+  pma:
+    image: phpmyadmin
+    depends_on:
+      - db
+    environment:
+      - PMA_ARBITRARY=1
+    restart: always
+    ports:
+      - 8081:80
