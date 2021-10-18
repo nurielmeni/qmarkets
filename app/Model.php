@@ -124,6 +124,7 @@ class Model {
   }
 
   public function search($str, $limit = 5) {
+    $str = mysqli_real_escape_string($this->mysqli, $str);
     $sql = <<<SQL
       SELECT t_users.uid, value as fullname, mail, t_users.name as username, total_weight
       FROM (
