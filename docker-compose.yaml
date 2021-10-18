@@ -1,6 +1,8 @@
 version: "3.2"
 services:
   php:
+    # For MAC M1
+    platform: linux/x86_64
     build: .
     ports:
       - 8080:80
@@ -10,6 +12,8 @@ services:
       # Mount source-code for development
       - ./app:/var/www/html
   db:
+    # For MAC M1
+    platform: linux/x86_64
     image: mysql
     restart: always
     environment:
@@ -20,6 +24,8 @@ services:
     volumes:
       - ./mysqldb:/var/lib/mysql
   pma:
+    # For MAC M1
+    platform: linux/x86_64
     image: phpmyadmin
     depends_on:
       - db
