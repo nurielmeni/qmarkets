@@ -45,7 +45,8 @@ class Model {
     return $result;
   }
 
-  public function migrate() {
+  // option = 1 add indices to table search fields
+  public function migrate($option = 0) {
     foreach($this->tables as $table) $this->execute("DROP TABLE IF EXISTS `$table`");
 
     // Import the database dump (sql file)
@@ -54,8 +55,31 @@ class Model {
     // Alter the tables for search
     if (!$this->addAdditionalSearchColumns()) return false;
 
+    // Alter the tables for search
+    if ($option === 1 && !$this->addIndices()) return false;
+
 
     return true;
+  }
+
+  private function addIndices() {
+    $usersTable = $this->tables['users'];
+    $profileTable = $this->tables['profile'];
+
+    $sql = <<<SQL
+      ALTER TABLE `$usersTable` ADD INDEX (search_mail1); 
+      ALTER TABLE `$usersTable` ADD INDEX (search_mail2);
+      ALTER TABLE `$usersTable` ADD INDEX (search_name1); 
+      ALTER TABLE `$usersTable` ADD INDEX (search_name2);
+      ALTER TABLE `$usersTable` ADD INDEX (search_name3); 
+      ALTER TABLE `$profileTable` ADD INDEX (search_fullname1); 
+      ALTER TABLE `$profileTable` ADD INDEX (search_fullname2);
+    SQL;
+
+    $res = $this->mysqli->multi_query($sql);
+    do {
+    } while ($this->mysqli->next_result());
+    return $res;
   }
 
   private function importSql($filepath) {
@@ -136,12 +160,19 @@ class Model {
       WHERE t_profile.fid = 3
     SQL;
 
+    $start = microtime(true);
+
     $res = $this->execute($sql);
+
+    $elapsed = microtime(true) - $start;
 
     $rows = [];
     while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
       $rows[] = $row;
     }
-    return $rows;
+    return [
+      'rows' => $rows,
+      'elapsed' => $elapsed
+    ];
   }
 }
