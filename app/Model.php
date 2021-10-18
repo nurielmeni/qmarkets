@@ -33,7 +33,7 @@ class Model {
 
   public function execute($query) {
     /* Execute mysql query */
-    $result = $mysqli->query($query);
-    printf("Select returned %d rows.\n", $result->num_rows);
+    $result = $this->mysqli->query($query);
+    return $result;
   }
 }
