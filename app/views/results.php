@@ -5,23 +5,33 @@
  */
 
 ?>
-
+<style>
+    table {
+        border-collapse: collapse;
+    }
+    th,
+    td {
+        text-align: left;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+    }
+</style>
 <section>
     <h2>Results</h2>
     <table>
         <thead>
-            <th>
-            <td>uid</td>
-            <td>Full Name</td>
-            <td>Email</td>
-            <td>Username</td>
-            <td>Weight</td>
-            </th>
+            <tr>
+                <th>uid</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Username</th>
+                <th>Weight</th>
+            </tr>
         </thead>
         <tbody>
             <?php foreach ($results as $result) : ?>
                 <tr>
-                    <td><?= $result['uis'] ?></td>
+                    <td><?= $result['uid'] ?></td>
                     <td><?= $result['fullname'] ?></td>
                     <td><?= $result['mail'] ?></td>
                     <td><?= $result['username'] ?></td>
